@@ -29,15 +29,15 @@ class Player {
     draw() { 
         // c.fillStyle = 'red'
         // c.fillRect(this.position.x, this.position.y, this.width, this.height)
-        if(this.image)
-            c.drawImage(
-                this.image, 
-                this.position.x, 
-                this.position.y, 
-                this.width, 
-                this.height
-            )
+        c.drawImage(
+            this.image, 
+            this.position.x, 
+            this.position.y, 
+            this.width, 
+            this.height
+        )
     }
+
     update() {
         if(this.image){
             this.draw()
@@ -47,15 +47,35 @@ class Player {
 }
 
 const player = new Player()
-player.draw()
+const keys = {
+    a: {
+        pressed: false 
+    },
+    d: {
+        pressed: false 
+    },
+    space: {
+        pressed: false 
+    } 
+}
 
 
 function animate() {
     requestAnimationFrame(animate)
     c.fillStyle = 'black'
-
     c.fillRect(0, 0, canvas.width, canvas.height)
-    player.update();
+    player.update()
+
+    if(keys.a.pressed && (player.position.x >= 0)) {
+        console.log(player.position.x)
+        player.velocity.x = -5
+    } else if (keys.d.pressed && (player.position.x <=  canvas.width - 70)) {
+        console.log(player.position.x)
+        player.velocity.x = 5
+    } else {
+        player.velocity.x = 0
+    }
+  
 }
 
 animate()
@@ -64,18 +84,32 @@ animate()
 addEventListener('keydown', ({key}) => {
     switch(key) {
         case 'a':
-            player.velocity.x = -5
+            console.log("a")
+            keys.a.pressed = true
             break
         case 'd':
-            player.velocity.x = 5
-            break
-         case 'ArrowLeft':
-            player.velocity.x = -5
-            break
-        case 'ArrowRight':
-            player.velocity.x = 5
+            console.log("d")
+            keys.d.pressed = true
             break
         case ' ':
+            console.log("space")
+            keys.space.pressed = true
+            break
+    }
+})
+
+addEventListener('keyup', ({key}) => {
+    switch(key) {
+        case 'a':
+            keys.a.pressed = false
+            // player.velocity.x = 0
+            break
+        case 'd':
+            keys.d.pressed = false
+            // player.velocity.x = 0
+            break
+        case ' ':
+            keys.space.pressed = false
             break
     }
 })
